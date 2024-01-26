@@ -28,6 +28,12 @@ class WebServerStatusSensor(Entity):
         self._state = None
 
     @property
+    def unique_id(self):
+        """Return a unique ID to use for this entity."""
+        return f"{self._name}-{self._name}"
+
+
+    @property
     def name(self):
         """Return the name of the sensor."""
         return self._name
