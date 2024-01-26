@@ -11,7 +11,7 @@ class WebServerStatusConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         """Handle a flow initiated by the user."""
         if user_input is not None:
             # Validate the user input (e.g., URL format)
-            if not is_valid_url(user_input['url']):
+            if not is_valid_url(user_input['webserver_url']):
                 return self.async_show_form(
                     step_id="user",
                     errors={"base": "invalid_url"},
@@ -26,16 +26,16 @@ class WebServerStatusConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
             # Configuration is valid, create an entry
             return self.async_create_entry(
-                title=user_input['name'],
-                data={"url": user_input['url']},
+                title=user_input['webserver_name'],
+                data={"webserver_url": user_input['webserver_url']},
             )
 
         # Show the form to the user
         return self.async_show_form(
             step_id="user",
             data_schema=vol.Schema({
-                vol.Required('name', default="WebServer"): str,
-                vol.Required('url', default=""): str,
+                vol.Required('webserver_name', default="WebServer"): str,
+                vol.Required('webserver_url', default=""): str,
             }),
         )
 

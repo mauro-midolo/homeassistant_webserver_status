@@ -10,20 +10,18 @@ SCAN_INTERVAL = timedelta(minutes=5)
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
     """Set up the WebServer Status sensor."""
-    host = config.get('host')
-    port = config.get('port', 80)
-    name = config.get('name', 'WebServer Status')
+    hostname = config.get('webserver_url')
+    name = config.get('webserver_name', 'WebServer Status')
 
-    add_entities([WebServerStatusSensor(name, host, port)], True)
+    add_entities([WebServerStatusSensor(name, hostname)], True)
 
 class WebServerStatusSensor(Entity):
     """Representation of a WebServer Status sensor."""
 
-    def __init__(self, name, host, port):
+    def __init__(self, name, hostname):
         """Initialize the sensor."""
         self._name = name
-        self._host = host
-        self._port = port
+        self._hostname = hostname
         self._state = None
 
     @property
@@ -44,7 +42,7 @@ class WebServerStatusSensor(Entity):
     def update(self):
         """Update the sensor."""
         try:
-            response = requests.get(f"http://{self._host}:{self._port}", timeout=5)
+            response = requests.get(self._hostname, timeout=5)
             if response.status_code == 200:
                 self._state = "online"
             else:
