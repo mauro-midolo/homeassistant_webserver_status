@@ -5,7 +5,6 @@ from datetime import timedelta
 from homeassistant.helpers.entity import Entity
 from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
-from . import WebServerStatusDataUpdateCoordinator
 from .const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
