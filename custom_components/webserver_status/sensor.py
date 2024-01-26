@@ -6,7 +6,7 @@ from homeassistant.helpers.entity import Entity
 from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
 from .const import DOMAIN
-
+from homeassistant.helpers.entity import DeviceInfo
 _LOGGER = logging.getLogger(__name__)
 
 SCAN_INTERVAL = timedelta(minutes=5)
@@ -54,10 +54,10 @@ class WebServerStatusSensor(Entity):
             self._state = "offline"
 
     @property
-    def device_info(self):
-        return {
-            "identifiers": {(DOMAIN, self._hostname)},
-            "name": self._hostname,
-            "model": "Hosted",
-            "manufacturer": "Virtual",
-        }
+    def device_info(self) -> DeviceInfo:
+        return DeviceInfo(
+            name=self._hostname,
+            identifiers={(DOMAIN, self._hostname)},
+            model="Hosted",
+            manufacturer="Virtual"
+            )
