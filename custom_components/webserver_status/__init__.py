@@ -4,11 +4,8 @@ from homeassistant.config_entries import SOURCE_IMPORT
 from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
 
+from .const import PLATFORMS
+
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
-    hass.async_create_task(
-        hass.config_entries.flow.async_init(
-            DOMAIN,
-            context={"source": SOURCE_IMPORT},
-        )
-    )
+    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     return True

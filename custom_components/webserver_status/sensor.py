@@ -4,6 +4,8 @@ import requests
 from datetime import timedelta
 from homeassistant.helpers.entity import Entity
 
+from .const import DOMAIN
+
 _LOGGER = logging.getLogger(__name__)
 
 SCAN_INTERVAL = timedelta(minutes=5)
