@@ -1,4 +1,4 @@
-# Home Assistant Integration: homeassistant-webserver-status
+# Home Assistant Webserver status Integration
 
 The Home Assistant Webserver Status integration allows you to monitor the status of a specific web page or web server through HTTP or HTTPS protocols within Home Assistant.
 
