@@ -13,16 +13,9 @@ _LOGGER = logging.getLogger(__name__)
 SCAN_INTERVAL = timedelta(minutes=5)
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities):
-    """Configura il componente all'interno di Home Assistant."""
-    _LOGGER.warning(entry)
-    async_add_entities([WebServerStatusSensor(entry)], True)
-
-def setup_platform(hass, config, add_entities, discovery_info=None):
-    """Set up the WebServer Status sensor."""
-    hostname = config.get('webserver_url')
-    name = config.get('webserver_name', 'WebServer Status')
-
-    add_entities([WebServerStatusSensor(name, hostname)], True)
+    webserver_name = entry.title
+    webserver_url = entry.data["webserver_url"]
+    async_add_entities([WebServerStatusSensor(webserver_name, webserver_url)], True)
 
 class WebServerStatusSensor(Entity):
     """Representation of a WebServer Status sensor."""
