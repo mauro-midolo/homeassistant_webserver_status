@@ -5,7 +5,7 @@ from datetime import timedelta
 from homeassistant.helpers.entity import Entity
 from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
-
+from . import WebServerStatusDataUpdateCoordinator
 from .const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
@@ -13,6 +13,8 @@ _LOGGER = logging.getLogger(__name__)
 SCAN_INTERVAL = timedelta(minutes=5)
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities):
+
+
     webserver_name = entry.title
     webserver_url = entry.data["webserver_url"]
     async_add_entities([WebServerStatusSensor(webserver_name, webserver_url)], True)
@@ -51,3 +53,12 @@ class WebServerStatusSensor(Entity):
                 self._state = "offline"
         except requests.RequestException:
             self._state = "offline"
+
+    @property
+    def device_info(self):
+        return {
+            "identifiers": {(DOMAIN, self._hostname)},
+            "name": self._hostname,
+            "model": "Hosted",
+            "manufacturer": "Virtual",
+        }
