@@ -9,3 +9,4 @@ async def async_setup(hass, config):
             context={"source": SOURCE_IMPORT},
         )
     )
+    return True
