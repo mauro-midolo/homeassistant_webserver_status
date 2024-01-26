@@ -1,6 +1,11 @@
 """The WebServer Status integration."""
-DOMAIN = "webserver_status"
+from .const import DOMAIN
+from homeassistant.config_entries import SOURCE_IMPORT
 
 async def async_setup(hass, config):
-    """Set up the WebServer Status component."""
-    return True
+    hass.async_create_task(
+        hass.config_entries.flow.async_init(
+            DOMAIN,
+            context={"source": SOURCE_IMPORT},
+        )
+    )
