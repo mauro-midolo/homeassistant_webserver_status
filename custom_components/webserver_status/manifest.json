@@ -1,0 +1,19 @@
+{
+    "domain": "webserver_status",
+    "name": "Webserver Status Integration",
+    "codeowners": [
+      "@mauro-midolo"
+    ],
+    "config_flow": true,
+    "dependencies": [],
+    "documentation": "https://github.com/mauro-midolo/homeassistant_webserver_status",
+    "homekit": {},
+    "iot_class": "cloud_polling",
+    "issue_tracker": "https://github.com/mauro-midolo/homeassistant_webserver_status/issues",
+    "requirements": [
+      
+    ],
+    "ssdp": [],
+    "version": "1.2.0",
+    "zeroconf": []
+  }
