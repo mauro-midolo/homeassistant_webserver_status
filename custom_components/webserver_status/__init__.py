@@ -1,6 +1,13 @@
 """The WebServer Status integration."""
-DOMAIN = "webserver_status"
+from .const import DOMAIN
+from homeassistant.config_entries import SOURCE_IMPORT
+from homeassistant.core import HomeAssistant
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
+from datetime import timedelta
 
-async def async_setup(hass, config):
-    """Set up the WebServer Status component."""
+from .const import PLATFORMS
+
+async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
+    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     return True
