@@ -64,7 +64,7 @@ class WebServerStatusEntity(CoordinatorEntity):
     @property
     def name(self):
         """Return the name of the sensor."""
-        return sensors_binary[self._sensor_name][0]
+        return f"{self._entry.data.get(CONF_ALIAS_VAR)} {sensors_binary[self._sensor_name][0]}"
 
     @property
     def state(self):
