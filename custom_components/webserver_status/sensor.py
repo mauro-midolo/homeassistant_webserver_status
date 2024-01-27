@@ -11,8 +11,6 @@ from .const import DOMAIN
 from homeassistant.helpers.entity import DeviceInfo
 _LOGGER = logging.getLogger(__name__)
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
-from datetime import timedelta
-SCAN_INTERVAL = timedelta(minutes=5)
 import time
 from .sensorlist import sensors_binary
 
@@ -21,7 +19,7 @@ class WebServerStatusDataCoordinator(DataUpdateCoordinator):
     def __init__(self, hass, hostname_alis, hostname):
         """Initialize the coordinator."""
         self.data : ConnectionStatus = ConnectionStatus(hostname_alis, hostname, None, None)
-        super().__init__(hass, _LOGGER, name=hostname_alis, update_method=self._async_update_data)
+        super().__init__(hass, _LOGGER, name=hostname_alis, update_method=self._async_update_data, update_interval=30)
 
     async def _async_update_data(self):
         try:
