@@ -22,7 +22,6 @@ class WebServerStatusDataCoordinator(DataUpdateCoordinator):
         """Initialize the coordinator."""
         super().__init__(hass, _LOGGER, name=hostname, update_method=self._async_update_data, update_interval=30)
         self._hostname = hostname
-        _LOGGER.warning("DATA!:" + self.data );
  
     async def _async_update_data(self):
         try:
@@ -55,13 +54,13 @@ class WebServerStatusEntity(CoordinatorEntity):
     @property
     def unique_id(self):
         """Return a unique ID to use for this entity."""
-        return f"{self.entry.data.get('webserver_name')}-{self._sensor_name}"
+        return f"{self._entry.data.get('webserver_name')}-{self._sensor_name}"
 
 
     @property
     def name(self):
         """Return the name of the sensor."""
-        return f"{self.entry.data.get('webserver_name')}-{self._sensor_name}"
+        return f"{self._entry.data.get('webserver_name')}-{self._sensor_name}"
 
     @property
     def state(self):
@@ -76,7 +75,7 @@ class WebServerStatusEntity(CoordinatorEntity):
     @property
     def device_info(self) -> DeviceInfo:
         return DeviceInfo(
-            name=self.entry.data.get('webserver_name'),
+            name=self._entry.data.get('webserver_name'),
             identifiers={(DOMAIN, self._entry.data.get('webserver_url'))}
             )
 
