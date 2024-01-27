@@ -31,7 +31,7 @@ class WebServerStatusDataCoordinator(DataUpdateCoordinator):
             state_result="offline"
             if response.status_code == 200:
                 state_result = "online"
-            duration_time = end_time - start_time
+            duration_time = round(end_time - start_time)
             return ConnectionStatus(self._hostname, state_result, duration_time)
         except requests.RequestException as e:
             return ConnectionStatus(self._hostname, "offline", None)
@@ -64,7 +64,7 @@ class WebServerStatusEntity(CoordinatorEntity):
     @property
     def name(self):
         """Return the name of the sensor."""
-        return f"{self._entry.data.get(CONF_ALIAS_VAR)}-{self._sensor_name}"
+        return sensors_binary[self._sensor_name][0]
 
     @property
     def state(self):
@@ -74,7 +74,12 @@ class WebServerStatusEntity(CoordinatorEntity):
     @property
     def unit_of_measurement(self):
         """Return the unit of measurement."""
-        return None
+        return sensors_binary[self._sensor_name][2]
+    
+    @property
+    def device_class(self):
+        """Return the device class of the sensor."""
+        return sensors_binary[self._sensor_name][1]
 
     @property
     def device_info(self) -> DeviceInfo:
