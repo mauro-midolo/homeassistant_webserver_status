@@ -20,7 +20,7 @@ class WebServerStatusDataCoordinator(DataUpdateCoordinator):
     """Class to manage fetching WebServer data."""
     def __init__(self, hass, hostname):
         """Initialize the coordinator."""
-        super().__init__(hass, _LOGGER, name=hostname, update_method=self._async_update_data, update_interval=30)
+        super().__init__(hass, _LOGGER, name=hostname, update_interval=timedelta(30))
         self._hostname = hostname
  
     async def _async_update_data(self):
