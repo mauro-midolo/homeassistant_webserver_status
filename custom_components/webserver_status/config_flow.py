@@ -27,7 +27,7 @@ class WebServerStatusConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             # Configuration is valid, create an entry
             return self.async_create_entry(
                 title=user_input['webserver_name'],
-                data={"webserver_name"=user_input['webserver_name'],"webserver_url": user_input['webserver_url']},
+                data={"webserver_name":user_input['webserver_name'], "webserver_url": user_input['webserver_url']},
             )
 
         # Show the form to the user
