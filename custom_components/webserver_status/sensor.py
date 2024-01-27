@@ -1,5 +1,6 @@
 """Support for monitoring the status of a WebServer."""
 import logging
+import asyncio
 import requests
 from datetime import timedelta
 from homeassistant.helpers.entity import Entity
@@ -24,7 +25,7 @@ class WebServerStatusDataCoordinator(DataUpdateCoordinator):
     async def _async_update_data(self):
         try:
             start_time = time.time()
-            response = requests.get(self.data._hostname, timeout=5)
+            response = response = await asyncio.to_thread(requests.get, self.data._hostname, timeout=5)
             end_time = time.time()
 
             if response.status_code == 200:
