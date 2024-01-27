@@ -44,6 +44,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
     hostname_alis = entry.title
     webserver_url = entry.data["webserver_url"]
     coordinator = WebServerStatusDataCoordinator(hass, hostname_alis, webserver_url);
+    await coordinator.async_config_entry_first_refresh()
     for sensor_name in sensors_binary:
         async_add_entities([WebServerStatusSensor(sensor_name, coordinator)], True)
 
