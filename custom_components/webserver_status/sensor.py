@@ -18,8 +18,8 @@ class WebServerStatusDataCoordinator(DataUpdateCoordinator):
     """Class to manage fetching WebServer data."""
     def __init__(self, hass, hostname_alis, hostname):
         """Initialize the coordinator."""
-        self.data : ConnectionStatus = ConnectionStatus(hostname_alis, hostname, None, None)
         super().__init__(hass, _LOGGER, name=hostname_alis, update_method=self._async_update_data, update_interval=30)
+        self.data : ConnectionStatus = ConnectionStatus(hostname_alis, hostname, None, None)
 
     async def _async_update_data(self):
         try:
@@ -42,6 +42,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
     hostname_alis = entry.data.get('webserver_name', 'WebServer')
     webserver_url = entry.data.get('webserver_url', '')
     coordinator = WebServerStatusDataCoordinator(hass, hostname_alis, webserver_url);
+    await coordinator.async_config_entry_first_refresh();
     for sensor_name in sensors_binary:
         async_add_entities([WebServerStatusSensor(sensor_name, coordinator)], True)
 
