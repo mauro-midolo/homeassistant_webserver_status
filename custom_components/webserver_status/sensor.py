@@ -31,7 +31,7 @@ class WebServerStatusDataCoordinator(DataUpdateCoordinator):
             state_result="offline"
             if response.status_code == 200:
                 state_result = "online"
-            duration_time = round(end_time - start_time)
+            duration_time = round(end_time - start_time, 2)
             return ConnectionStatus(self._hostname, state_result, duration_time, response.status_code)
         except requests.RequestException:
             return ConnectionStatus(self._hostname, "offline", None, None)
