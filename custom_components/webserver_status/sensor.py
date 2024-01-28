@@ -32,9 +32,9 @@ class WebServerStatusDataCoordinator(DataUpdateCoordinator):
             if response.status_code == 200:
                 state_result = "online"
             duration_time = round(end_time - start_time)
-            return ConnectionStatus(self._hostname, state_result, duration_time)
-        except requests.RequestException as e:
-            return ConnectionStatus(self._hostname, "offline", None)
+            return ConnectionStatus(self._hostname, state_result, duration_time, response.status_code)
+        except requests.RequestException:
+            return ConnectionStatus(self._hostname, "offline", None, None)
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities):
