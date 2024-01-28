@@ -12,9 +12,7 @@ class HttpClient():
             start_time = time.time()
             response = requests.get(url=url, allow_redirects=False, timeout=5)
             end_time = time.time()
-            state_result="offline"
-            if response.status_code == 200:
-                state_result = "online"
+            state_result = "online"
             duration_time = round(end_time - start_time, 2)
             return ConnectionStatus(url, state_result, duration_time, response.status_code)
         except requests.RequestException:
