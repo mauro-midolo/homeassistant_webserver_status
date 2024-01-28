@@ -12,6 +12,7 @@ class WebServerStatusConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     async def async_step_user(self, user_input=None):
         """Handle a flow initiated by the user."""
+        self._errors = {}
         if user_input is not None:
             if not is_valid_url(user_input['webserver_url']):
                 self._errors["base"] = "invalid_url"
