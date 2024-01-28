@@ -10,7 +10,7 @@ class HttpClient():
     def get_request(self, url) -> ConnectionStatus:
         try:
             start_time = time.time()
-            response = response = requests.get( url, timeout=5)
+            response = requests.get(url=url, allow_redirects=False, timeout=5)
             end_time = time.time()
             state_result="offline"
             if response.status_code == 200:
