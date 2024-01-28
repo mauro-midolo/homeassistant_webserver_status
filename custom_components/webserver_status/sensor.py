@@ -25,7 +25,7 @@ class WebServerStatusDataCoordinator(DataUpdateCoordinator):
  
     async def _async_update_data(self):
         http_client : HttpClient = HttpClient()
-        await asyncio.to_thread(http_client.get_request, self._hostname)
+        return await asyncio.to_thread(http_client.get_request, self._hostname)
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities):
