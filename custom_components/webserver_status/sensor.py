@@ -2,12 +2,11 @@
 import logging
 import asyncio
 from datetime import timedelta
-from homeassistant.helpers.entity import Entity
 from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.components.sensor import SensorEntity
 
-from httpclient import HttpClient
+from .http.httpclient import HttpClient
 
 from .const import CONF_ALIAS_VAR, CONF_SCAN_INTERVAL, CONF_URL_VAR, DEFAULT_SCAN_INTERVAL, DOMAIN
 from homeassistant.helpers.entity import DeviceInfo

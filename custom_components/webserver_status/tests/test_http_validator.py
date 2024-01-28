@@ -1,7 +1,7 @@
 import unittest
 #import sys
 #sys.path.append("..")
-from httpvalidator import HttpValidator
+from custom_components.webserver_status.http.httpvalidator import HttpValidator
 
 
 class HttpValidatorTest(unittest.TestCase):

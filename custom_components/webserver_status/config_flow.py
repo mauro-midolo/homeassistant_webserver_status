@@ -3,7 +3,7 @@
 import voluptuous as vol
 from homeassistant import config_entries
 import homeassistant.helpers.config_validation as cv
-from .httpvalidator import HttpValidator
+from .http.httpvalidator import HttpValidator
 from .const import DOMAIN, CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL, CONF_ALIAS_VAR, CONF_URL_VAR
 
 
@@ -54,7 +54,7 @@ class WebServerStatusOptionsFlowHandler(config_entries.OptionsFlow):
         self.config_entry = config_entry
         self.options = dict(config_entry.options)
 
-    async def async_step_init(self, user_input=None):  # pylint: disable=unused-argument
+    async def async_step_init(self, user_input=None):
         """Manage the options."""
         return await self.async_step_user()
 

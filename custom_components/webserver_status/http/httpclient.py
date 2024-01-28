@@ -1,6 +1,6 @@
 
 
-from .Ping import ConnectionStatus
+from .connectionresult import ConnectionStatus
 
 import time
 import requests
