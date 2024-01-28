@@ -1,13 +1,14 @@
 """Support for monitoring the status of a WebServer."""
 import logging
 import asyncio
-import requests
 from datetime import timedelta
 from homeassistant.helpers.entity import Entity
 from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.components.sensor import SensorEntity
-from .Ping import ConnectionStatus
+
+from httpclient import HttpClient
+
 from .const import CONF_ALIAS_VAR, CONF_SCAN_INTERVAL, CONF_URL_VAR, DEFAULT_SCAN_INTERVAL, DOMAIN
 from homeassistant.helpers.entity import DeviceInfo
 _LOGGER = logging.getLogger(__name__)
@@ -24,17 +25,8 @@ class WebServerStatusDataCoordinator(DataUpdateCoordinator):
         self._hostname = hostname
  
     async def _async_update_data(self):
-        try:
-            start_time = time.time()
-            response = response = await asyncio.to_thread(requests.get, self._hostname, timeout=5)
-            end_time = time.time()
-            state_result="offline"
-            if response.status_code == 200:
-                state_result = "online"
-            duration_time = round(end_time - start_time, 2)
-            return ConnectionStatus(self._hostname, state_result, duration_time, response.status_code)
-        except requests.RequestException:
-            return ConnectionStatus(self._hostname, "offline", None, None)
+        http_client : HttpClient = HttpClient()
+        await asyncio.to_thread(http_client.get_request, self._hostname)
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities):
