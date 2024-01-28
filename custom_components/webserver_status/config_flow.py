@@ -2,6 +2,8 @@
 """Config flow for WebServer Status integration."""
 import voluptuous as vol
 from homeassistant import config_entries
+import homeassistant.helpers.config_validation as cv
+from .httpvalidator import HttpValidator
 from .const import DOMAIN, CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL, CONF_ALIAS_VAR, CONF_URL_VAR
 
 
@@ -42,8 +44,7 @@ class WebServerStatusConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
 def is_valid_url(url):
     """Check if the provided string is a valid URL."""
-    # Add your custom URL validation logic here
-    return True  # Placeholder for validation
+    return HttpValidator().is_valid(url) 
 
 class WebServerStatusOptionsFlowHandler(config_entries.OptionsFlow):
     """Config flow options handler for Electrolux Status."""
