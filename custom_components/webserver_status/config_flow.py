@@ -13,27 +13,27 @@ class WebServerStatusConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     async def async_step_user(self, user_input=None):
         """Handle a flow initiated by the user."""
         if user_input is not None:
-            # Validate the user input (e.g., URL format)
             if not is_valid_url(user_input['webserver_url']):
-                return self.async_show_form(
-                    step_id="user",
-                    errors={"base": "invalid_url"},
-                )
-
-            # Configuration is valid, create an entry
+                self._errors["base"] = "invalid_url"
+                return await self._show_config_form(user_input)
+                
             return self.async_create_entry(
                 title=user_input['webserver_name'],
                 data={CONF_ALIAS_VAR:user_input['webserver_name'], CONF_URL_VAR: user_input['webserver_url']},
             )
 
         # Show the form to the user
+        return await self._show_config_form(user_input)
+    
+    async def _show_config_form(self, user_input):
+        """Show the configuration form to edit location data."""
         return self.async_show_form(
-            step_id="user",
-            data_schema=vol.Schema({
-                vol.Required(CONF_ALIAS_VAR, default="WebServer"): str,
-                vol.Required(CONF_URL_VAR, default=""): str,
-            }),
-        )
+                step_id="user",
+                data_schema=vol.Schema({
+                    vol.Required(CONF_ALIAS_VAR, default="WebServer"): str,
+                    vol.Required(CONF_URL_VAR, default=""): str,
+                }),
+                errors=self._errors)
 
 def is_valid_url(url):
     """Check if the provided string is a valid URL."""
