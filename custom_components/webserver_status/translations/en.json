@@ -1,0 +1,26 @@
+{
+    "config": {
+      "step": {
+        "user": {
+          "title": "Webserver Status",
+          "description": "If you need help with the configuration have a look here: https://github.com/mauro-midolo/homeassistant_webserver_status",
+          "data": {
+            "webserver_name": "Webserver name (ie. Google)",
+            "webserver_url": "Webserver url (ie. https://google.com)"
+          }
+        }
+      },
+      "error": {
+        "invalid_url": "Http/Https path is not correct"
+      }
+    },
+    "options": {
+      "step": {
+        "user": {
+          "data": {
+            "scan_interval": "Update interval (seconds)"
+          }
+        }
+      }
+    }
+  }

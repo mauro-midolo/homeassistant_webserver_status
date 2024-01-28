@@ -20,13 +20,6 @@ class WebServerStatusConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     errors={"base": "invalid_url"},
                 )
 
-            # Check if there's already an entry with the same URL
-            #if self._async_current_entries():
-            #    return self.async_show_form(
-            #        step_id="user",
-            #        errors={"base": "url_already_exists"},
-            #    )
-
             # Configuration is valid, create an entry
             return self.async_create_entry(
                 title=user_input['webserver_name'],
