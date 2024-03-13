@@ -7,10 +7,10 @@ import requests
 
 class HttpClient():
     
-    def get_request(self, url) -> ConnectionStatus:
+    def get_request(self, url, ssl_check=True) -> ConnectionStatus:
         try:
             start_time = time.time()
-            response = requests.get(url=url, allow_redirects=False, timeout=5)
+            response = requests.get(url=url, allow_redirects=False, timeout=5, verify=ssl_check)
             end_time = time.time()
             state_result = "online"
             duration_time = round(end_time - start_time, 2)
