@@ -4,7 +4,14 @@ import voluptuous as vol
 from homeassistant import config_entries
 import homeassistant.helpers.config_validation as cv
 from .http.httpvalidator import HttpValidator
-from .const import DOMAIN, CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL, CONF_ALIAS_VAR, CONF_URL_VAR
+from .const import (
+    DOMAIN,
+    CONF_SCAN_INTERVAL,
+    DEFAULT_SCAN_INTERVAL,
+    CONF_ALIAS_VAR,
+    CONF_URL_VAR,
+    CONF_SLL_CHECK_VAR,
+)
 
 
 class WebServerStatusConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
@@ -14,31 +21,41 @@ class WebServerStatusConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         """Handle a flow initiated by the user."""
         self._errors = {}
         if user_input is not None:
-            if not is_valid_url(user_input['webserver_url']):
+            if not is_valid_url(user_input[CONF_URL_VAR]):
                 self._errors["base"] = "invalid_url"
                 return await self._show_config_form(user_input)
-                
+
             return self.async_create_entry(
-                title=user_input['webserver_name'],
-                data={CONF_ALIAS_VAR:user_input['webserver_name'], CONF_URL_VAR: user_input['webserver_url']},
+                title=user_input[CONF_ALIAS_VAR],
+                data={
+                    CONF_ALIAS_VAR: user_input[CONF_ALIAS_VAR],
+                    CONF_URL_VAR: user_input[CONF_URL_VAR],
+                    CONF_SLL_CHECK_VAR: user_input[CONF_SLL_CHECK_VAR],
+                },
             )
 
         # Show the form to the user
         return await self._show_config_form(user_input)
-    
+
     async def _show_config_form(self, user_input):
         """Show the configuration form to edit location data."""
         return self.async_show_form(
-                step_id="user",
-                data_schema=vol.Schema({
+            step_id="user",
+            data_schema=vol.Schema(
+                {
                     vol.Required(CONF_ALIAS_VAR, default="WebServer"): str,
                     vol.Required(CONF_URL_VAR, default=""): str,
-                }),
-                errors=self._errors)
+                    vol.Required(CONF_SLL_CHECK_VAR, default=True): bool,
+                }
+            ),
+            errors=self._errors,
+        )
+
 
 def is_valid_url(url):
     """Check if the provided string is a valid URL."""
-    return HttpValidator().is_valid(url) 
+    return HttpValidator().is_valid(url)
+
 
 class WebServerStatusOptionsFlowHandler(config_entries.OptionsFlow):
     """Config flow options handler for Electrolux Status."""
