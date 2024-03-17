@@ -5,10 +5,6 @@ from custom_components.webserver_status.http.httpvalidator import HttpValidator
 
 
 class HttpValidatorTest(unittest.TestCase):
-
-    def test_should_exists(self):
-        HttpValidator()
-        assert True
         
     def test_should_return_false_if_not_url(self):
         assert HttpValidator().is_valid("NoValidUrl") == False
