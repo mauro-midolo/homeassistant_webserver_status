@@ -1,10 +1,6 @@
 """The WebServer Status integration."""
-from .const import DOMAIN
-from homeassistant.config_entries import SOURCE_IMPORT
 from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
-from datetime import timedelta
 
 from .const import PLATFORMS
 
