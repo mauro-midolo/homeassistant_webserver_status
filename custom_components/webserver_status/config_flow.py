@@ -2,6 +2,7 @@
 """Config flow for WebServer Status integration."""
 import voluptuous as vol
 from homeassistant import config_entries
+from homeassistant.core import callback
 import homeassistant.helpers.config_validation as cv
 from .http.httpvalidator import HttpValidator
 from .const import (
@@ -16,7 +17,12 @@ from .const import (
 
 class WebServerStatusConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     """WebServer Status configuration flow."""
-
+    @staticmethod
+    @callback
+    def async_get_options_flow(config_entry: config_entries.ConfigEntry):
+        """Get the options flow for this handler."""
+        return WebServerStatusOptionsFlowHandler(config_entry)
+        
     async def async_step_user(self, user_input=None):
         """Handle a flow initiated by the user."""
         self._errors = {}
