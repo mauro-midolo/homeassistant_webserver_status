@@ -21,7 +21,7 @@ class WebServerStatusConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     @callback
     def async_get_options_flow(config_entry: config_entries.ConfigEntry):
         """Get the options flow for this handler."""
-        return WebServerStatusOptionsFlowHandler(config_entry)
+        return WebServerStatusOptionsFlowHandler()
         
     async def async_step_user(self, user_input=None):
         """Handle a flow initiated by the user."""
@@ -64,22 +64,28 @@ def is_valid_url(url):
 
 
 class WebServerStatusOptionsFlowHandler(config_entries.OptionsFlow):
-    """Config flow options handler for Electrolux Status."""
-
-    def __init__(self, config_entry):
-        """Initialize HACS options flow."""
-        self.config_entry = config_entry
-        self.options = dict(config_entry.options)
+    """Config flow options handler for Webserver Status."""
 
     async def async_step_init(self, user_input=None):
         """Manage the options."""
-        return await self.async_step_user()
+        return await self.async_step_user(user_input)
 
     async def async_step_user(self, user_input=None):
         """Handle a flow initialized by the user."""
         if user_input is not None:
-            self.options.update(user_input)
-            return await self._update_options()
+            # Parto dalle opzioni esistenti e applico le modifiche
+            options = dict(self.config_entry.options)
+            options.update(user_input)
+
+            return self.async_create_entry(
+                title=self.config_entry.data.get(CONF_ALIAS_VAR),
+                data=options,
+            )
+
+        # Default value: prendo dalle options o dal default
+        default_interval = self.config_entry.options.get(
+            CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL
+        )
 
         return self.async_show_form(
             step_id="user",
@@ -87,9 +93,7 @@ class WebServerStatusOptionsFlowHandler(config_entries.OptionsFlow):
                 {
                     vol.Optional(
                         CONF_SCAN_INTERVAL,
-                        default=self.config_entry.options.get(
-                            CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL
-                        ),
+                        default=default_interval,
                     ): cv.positive_int,
                 }
             ),
