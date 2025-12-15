@@ -1,19 +1,21 @@
 
-
+import time
+import asyncio
+from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from .connectionresult import ConnectionStatus
 
-import time
-import requests
-
-class HttpClient():
-    
-    def get_request(self, url, ssl_check=True) -> ConnectionStatus:
+class HttpClient:
+    async def get_request(self, hass, url, ssl_check=True) -> ConnectionStatus:
+        session = async_get_clientsession(hass)
         try:
-            start_time = time.time()
-            response = requests.get(url=url, allow_redirects=False, timeout=5, verify=ssl_check)
-            end_time = time.time()
-            state_result = "online"
-            duration_time = round(end_time - start_time, 2)
-            return ConnectionStatus(url, state_result, duration_time, response.status_code)
-        except requests.RequestException:
+            start = time.monotonic()
+            async with session.get(
+                url,
+                allow_redirects=False,
+                timeout=5,
+                ssl=ssl_check,   # in aiohttp è ssl, non verify
+            ) as resp:
+                duration = round(time.monotonic() - start, 2)
+                return ConnectionStatus(url, "online", duration, resp.status)
+        except (asyncio.TimeoutError, Exception):
             return ConnectionStatus(url, "offline", None, None)
