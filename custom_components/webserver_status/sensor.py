@@ -34,9 +34,15 @@ class WebServerStatusDataCoordinator(DataUpdateCoordinator):
 
     async def _async_update_data(self):
         http_client: HttpClient = HttpClient()
-        return await asyncio.to_thread(
+        result = await asyncio.to_thread(
             http_client.get_request, self._hostname, self._ssl_checker
         )
+    
+        return {
+            "state": result.state_result,         
+            "duration": result.duration_time,      
+            "status_code": result.status_code
+        }
 
 
 async def async_setup_entry(
