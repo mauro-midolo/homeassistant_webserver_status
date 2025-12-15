@@ -87,8 +87,7 @@ class WebServerStatusEntity(CoordinatorEntity):
 
     @property
     def state(self):
-        """Return the state of the sensor."""
-        return self.coordinator.data._data[self._sensor_name]
+        return self.coordinator.data.get(self._sensor_name)
 
     @property
     def unit_of_measurement(self):
