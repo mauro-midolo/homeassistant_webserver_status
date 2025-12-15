@@ -34,7 +34,7 @@ class WebServerStatusDataCoordinator(DataUpdateCoordinator):
 
     async def _async_update_data(self):
         http_client = HttpClient()
-        result = await http_client.get_request(self._hostname, self._ssl_checker)
+        result = await http_client.get_request(self.hass, self._hostname, self._ssl_checker)
     
         return {
             "state": result.state_result,
