@@ -1,4 +1,3 @@
-
 import time
 import asyncio
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
@@ -13,7 +12,7 @@ class HttpClient:
                 url,
                 allow_redirects=False,
                 timeout=5,
-                ssl=ssl_check,   # in aiohttp è ssl, non verify
+                ssl=ssl_check,
             ) as resp:
                 duration = round(time.monotonic() - start, 2)
                 return ConnectionStatus(url, "online", duration, resp.status)
