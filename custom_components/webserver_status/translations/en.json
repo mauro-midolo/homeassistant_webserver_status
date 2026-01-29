@@ -3,10 +3,10 @@
       "step": {
         "user": {
           "title": "Webserver Status",
-          "description": "If you need help with the configuration have a look here: https://github.com/mauro-midolo/homeassistant_webserver_status",
+          "description": "For configuration help, see the documentation.",
           "data": {
             "webserver_name": "Webserver name (ie. Google)",
-            "webserver_url": "Webserver url (ie. https://google.com)",
+            "webserver_url": "Webserver http or https url",
             "webserver_ssl_check": "SSL Check"
           }
         }
