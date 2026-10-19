@@ -18,6 +18,7 @@ The Home Assistant Webserver Status integration allows you to monitor the status
 - Configurable update interval and request timeout (Integration options)
 - Optional link URL (defaults to the monitored url), shown as "Visit" on the device page and as the `url` attribute of the status sensor
 - When the webserver is offline, the `error` attribute of the status sensor tells why (DNS, connection, SSL, timeout)
+- Integration icon and logo in Home Assistant (2026.3 or later)
 
 ## Installation
 1. Install integration via HACS using "Custom repositories"
