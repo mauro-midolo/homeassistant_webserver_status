@@ -8,6 +8,9 @@ on:
     - cron: "0 12 * * *"
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   hacs:
     name: HACS validation
@@ -72,11 +75,11 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          # The tagged commit carries the release version in manifest.json
+          # Keep manifest.json on main aligned with the released version
           jq --arg v "$VERSION" '.version = $v' "$MANIFEST" > manifest.tmp
           mv manifest.tmp "$MANIFEST"
           git commit -am "Release v$VERSION"
           git tag "v$VERSION"
-          git push origin "v$VERSION"
+          git push --atomic origin HEAD:refs/heads/main "v$VERSION"
 
           gh release create "v$VERSION" --title "v$VERSION" --generate-notes --verify-tag
