@@ -17,8 +17,10 @@ from .const import (
     CONF_ALIAS_VAR,
     CONF_SCAN_INTERVAL,
     CONF_SLL_CHECK_VAR,
+    CONF_TIMEOUT,
     CONF_URL_VAR,
     DEFAULT_SCAN_INTERVAL,
+    DEFAULT_TIMEOUT,
     DOMAIN,
 )
 
@@ -26,15 +28,18 @@ from .const import (
 class WebServerStatusDataCoordinator(DataUpdateCoordinator):
     """Class to manage fetching WebServer data."""
 
-    def __init__(self, hass, hostname, update_interval, ssl_checker):
+    def __init__(self, hass, hostname, update_interval, ssl_checker, timeout):
         """Initialize the coordinator."""
         super().__init__(hass, _LOGGER, name=hostname, update_interval=update_interval)
         self._hostname = hostname
         self._ssl_checker = ssl_checker
+        self._timeout = timeout
 
     async def _async_update_data(self):
         http_client = HttpClient()
-        result = await http_client.get_request(self.hass, self._hostname, self._ssl_checker)
+        result = await http_client.get_request(
+            self.hass, self._hostname, self._ssl_checker, self._timeout
+        )
         return result._data
 
 
@@ -47,8 +52,9 @@ async def async_setup_entry(
     else:
         update_interval = timedelta(seconds=DEFAULT_SCAN_INTERVAL)
     ssl_checker = entry.data.get(CONF_SLL_CHECK_VAR, True)
+    timeout = entry.options.get(CONF_TIMEOUT, DEFAULT_TIMEOUT)
     coordinator = WebServerStatusDataCoordinator(
-        hass, webserver_url, update_interval, ssl_checker
+        hass, webserver_url, update_interval, ssl_checker, timeout
     )
     await coordinator.async_config_entry_first_refresh()
     for sensor_name in sensors_binary:

@@ -9,6 +9,8 @@ from .const import (
     DOMAIN,
     CONF_SCAN_INTERVAL,
     DEFAULT_SCAN_INTERVAL,
+    CONF_TIMEOUT,
+    DEFAULT_TIMEOUT,
     CONF_ALIAS_VAR,
     CONF_URL_VAR,
     CONF_SLL_CHECK_VAR,
@@ -86,6 +88,9 @@ class WebServerStatusOptionsFlowHandler(config_entries.OptionsFlow):
         default_interval = self.config_entry.options.get(
             CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL
         )
+        default_timeout = self.config_entry.options.get(
+            CONF_TIMEOUT, DEFAULT_TIMEOUT
+        )
 
         return self.async_show_form(
             step_id="user",
@@ -95,6 +100,10 @@ class WebServerStatusOptionsFlowHandler(config_entries.OptionsFlow):
                         CONF_SCAN_INTERVAL,
                         default=default_interval,
                     ): cv.positive_int,
+                    vol.Optional(
+                        CONF_TIMEOUT,
+                        default=default_timeout,
+                    ): vol.All(vol.Coerce(int), vol.Range(min=1)),
                 }
             ),
         )

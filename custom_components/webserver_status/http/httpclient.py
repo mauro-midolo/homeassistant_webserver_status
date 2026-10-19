@@ -1,17 +1,18 @@
 import time
 import asyncio
+import aiohttp
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from .connectionresult import ConnectionStatus
 
 class HttpClient:
-    async def get_request(self, hass, url, ssl_check=True) -> ConnectionStatus:
+    async def get_request(self, hass, url, ssl_check=True, timeout=5) -> ConnectionStatus:
         session = async_get_clientsession(hass)
         try:
             start = time.monotonic()
             async with session.get(
                 url,
                 allow_redirects=False,
-                timeout=5,
+                timeout=aiohttp.ClientTimeout(total=timeout),
                 ssl=ssl_check,
             ) as resp:
                 duration = round(time.monotonic() - start, 2)
