@@ -14,6 +14,7 @@ The Home Assistant Webserver Status integration allows you to monitor the status
 - Monitoring the status of a web page or web server.
 - Supports for HTTP and HTTPS protocols.
 - Supports the deactivation of the SSL validity check
+- Configurable update interval and request timeout (Integration options)
 
 ## Installation
 1. Install integration via HACS using "Custom repositories"

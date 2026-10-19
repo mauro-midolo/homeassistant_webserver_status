@@ -11,3 +11,7 @@ CONF_SLL_CHECK_VAR="webserver_ssl_check"
 #Update Inteval
 CONF_SCAN_INTERVAL = "ping_interval"
 DEFAULT_SCAN_INTERVAL = 60
+
+#Request Timeout
+CONF_TIMEOUT = "timeout"
+DEFAULT_TIMEOUT = 5
