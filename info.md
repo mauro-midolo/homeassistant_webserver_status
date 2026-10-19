@@ -1,6 +1,7 @@
 # Home Assistant Webserver status Integration
-[![Validate with HACS](https://github.com/mauro-midolo/homeassistant_webserver_status/actions/workflows/hacs.yml/badge.svg)](https://github.com/mauro-midolo/homeassistant_webserver_status/actions/workflows/hacs.yml)
-[![Validate with hassfest](https://github.com/mauro-midolo/homeassistant_webserver_status/actions/workflows/hassfest.yml/badge.svg)](https://github.com/mauro-midolo/homeassistant_webserver_status/actions/workflows/hassfest.yml)
+[![CI](https://github.com/mauro-midolo/homeassistant_webserver_status/actions/workflows/ci.yml/badge.svg)](https://github.com/mauro-midolo/homeassistant_webserver_status/actions/workflows/ci.yml)
+[![GitHub Release](https://img.shields.io/github/v/release/mauro-midolo/homeassistant_webserver_status)](https://github.com/mauro-midolo/homeassistant_webserver_status/releases/latest)
+[![HACS Custom](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://hacs.xyz/docs/faq/custom_repositories)
 
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=mauro-midolo_homeassistant_webserver_status&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=mauro-midolo_homeassistant_webserver_status)
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=mauro-midolo_homeassistant_webserver_status&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=mauro-midolo_homeassistant_webserver_status)
