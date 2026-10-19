@@ -109,9 +109,12 @@ class WebServerStatusEntity(CoordinatorEntity):
 
     @property
     def extra_state_attributes(self):
-        """Expose the webserver link on the status sensor."""
+        """Expose the webserver link and the last error on the status sensor."""
         if self._sensor_name == "state":
-            return {"url": get_link_url(self._entry)}
+            return {
+                "url": get_link_url(self._entry),
+                "error": self.coordinator.data.get("error"),
+            }
         return None
 
     @property
