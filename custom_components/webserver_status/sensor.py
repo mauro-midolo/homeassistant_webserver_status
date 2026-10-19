@@ -15,6 +15,7 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 _LOGGER = logging.getLogger(__name__)
 from .const import (
     CONF_ALIAS_VAR,
+    CONF_LINK_URL_VAR,
     CONF_SCAN_INTERVAL,
     CONF_SLL_CHECK_VAR,
     CONF_TIMEOUT,
@@ -41,6 +42,14 @@ class WebServerStatusDataCoordinator(DataUpdateCoordinator):
             self.hass, self._hostname, self._ssl_checker, self._timeout
         )
         return result._data
+
+
+def get_link_url(entry: ConfigEntry):
+    """Return the URL to open for this webserver, defaulting to the monitored one."""
+    link_url = entry.options.get(
+        CONF_LINK_URL_VAR, entry.data.get(CONF_LINK_URL_VAR, "")
+    )
+    return link_url or entry.data.get(CONF_URL_VAR)
 
 
 async def async_setup_entry(
@@ -99,10 +108,18 @@ class WebServerStatusEntity(CoordinatorEntity):
         return sensors_binary[self._sensor_name][1]
 
     @property
+    def extra_state_attributes(self):
+        """Expose the webserver link on the status sensor."""
+        if self._sensor_name == "state":
+            return {"url": get_link_url(self._entry)}
+        return None
+
+    @property
     def device_info(self) -> DeviceInfo:
         return DeviceInfo(
             name=self._entry.data.get(CONF_ALIAS_VAR),
             identifiers={(DOMAIN, self._entry.data.get(CONF_URL_VAR))},
+            configuration_url=get_link_url(self._entry),
         )
 
 
