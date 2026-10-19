@@ -7,12 +7,14 @@
           "data": {
             "webserver_name": "Webserver name (ie. Google)",
             "webserver_url": "Webserver http or https url",
-            "webserver_ssl_check": "SSL Check"
+            "webserver_ssl_check": "SSL Check",
+            "webserver_link_url": "Link URL (optional, opened from the dashboard; defaults to the webserver url)"
           }
         }
       },
       "error": {
-        "invalid_url": "Http/Https path is not correct"
+        "invalid_url": "Http/Https path is not correct",
+        "invalid_link_url": "Link url must be a valid http/https url"
       }
     },
     "options": {
@@ -20,9 +22,13 @@
         "user": {
           "data": {
             "ping_interval": "Update interval (seconds)",
-            "timeout": "Request timeout (seconds)"
+            "timeout": "Request timeout (seconds)",
+            "webserver_link_url": "Link URL (optional, defaults to the webserver url)"
           }
         }
+      },
+      "error": {
+        "invalid_link_url": "Link url must be a valid http/https url"
       }
     }
   }

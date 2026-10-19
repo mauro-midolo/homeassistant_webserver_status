@@ -14,6 +14,7 @@ from .const import (
     CONF_ALIAS_VAR,
     CONF_URL_VAR,
     CONF_SLL_CHECK_VAR,
+    CONF_LINK_URL_VAR,
 )
 
 
@@ -32,6 +33,10 @@ class WebServerStatusConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             if not is_valid_url(user_input[CONF_URL_VAR]):
                 self._errors["base"] = "invalid_url"
                 return await self._show_config_form(user_input)
+            link_url = user_input.get(CONF_LINK_URL_VAR, "").strip()
+            if link_url and not is_valid_url(link_url):
+                self._errors["base"] = "invalid_link_url"
+                return await self._show_config_form(user_input)
 
             return self.async_create_entry(
                 title=user_input[CONF_ALIAS_VAR],
@@ -39,6 +44,7 @@ class WebServerStatusConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     CONF_ALIAS_VAR: user_input[CONF_ALIAS_VAR],
                     CONF_URL_VAR: user_input[CONF_URL_VAR],
                     CONF_SLL_CHECK_VAR: user_input[CONF_SLL_CHECK_VAR],
+                    CONF_LINK_URL_VAR: link_url,
                 },
             )
 
@@ -54,6 +60,7 @@ class WebServerStatusConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     vol.Required(CONF_ALIAS_VAR, default="WebServer"): str,
                     vol.Required(CONF_URL_VAR, default=""): str,
                     vol.Required(CONF_SLL_CHECK_VAR, default=True): bool,
+                    vol.Optional(CONF_LINK_URL_VAR): str,
                 }
             ),
             errors=self._errors,
@@ -74,15 +81,22 @@ class WebServerStatusOptionsFlowHandler(config_entries.OptionsFlow):
 
     async def async_step_user(self, user_input=None):
         """Handle a flow initialized by the user."""
+        errors = {}
         if user_input is not None:
-            # Parto dalle opzioni esistenti e applico le modifiche
-            options = dict(self.config_entry.options)
-            options.update(user_input)
+            # Il campo svuotato non viene inviato: lo salvo come stringa vuota
+            link_url = user_input.get(CONF_LINK_URL_VAR, "").strip()
+            if link_url and not is_valid_url(link_url):
+                errors["base"] = "invalid_link_url"
+            else:
+                # Parto dalle opzioni esistenti e applico le modifiche
+                options = dict(self.config_entry.options)
+                options.update(user_input)
+                options[CONF_LINK_URL_VAR] = link_url
 
-            return self.async_create_entry(
-                title=self.config_entry.data.get(CONF_ALIAS_VAR),
-                data=options,
-            )
+                return self.async_create_entry(
+                    title=self.config_entry.data.get(CONF_ALIAS_VAR),
+                    data=options,
+                )
 
         # Default value: prendo dalle options o dal default
         default_interval = self.config_entry.options.get(
@@ -90,6 +104,9 @@ class WebServerStatusOptionsFlowHandler(config_entries.OptionsFlow):
         )
         default_timeout = self.config_entry.options.get(
             CONF_TIMEOUT, DEFAULT_TIMEOUT
+        )
+        current_link_url = self.config_entry.options.get(
+            CONF_LINK_URL_VAR, self.config_entry.data.get(CONF_LINK_URL_VAR, "")
         )
 
         return self.async_show_form(
@@ -104,8 +121,13 @@ class WebServerStatusOptionsFlowHandler(config_entries.OptionsFlow):
                         CONF_TIMEOUT,
                         default=default_timeout,
                     ): vol.All(vol.Coerce(int), vol.Range(min=1)),
+                    vol.Optional(
+                        CONF_LINK_URL_VAR,
+                        description={"suggested_value": current_link_url},
+                    ): str,
                 }
             ),
+            errors=errors,
         )
 
     async def _update_options(self):
