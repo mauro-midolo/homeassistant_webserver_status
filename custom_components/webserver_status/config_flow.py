@@ -15,6 +15,7 @@ from .const import (
     CONF_URL_VAR,
     CONF_SLL_CHECK_VAR,
     CONF_LINK_URL_VAR,
+    CONF_LAST_CHECK_VAR,
 )
 
 
@@ -45,6 +46,7 @@ class WebServerStatusConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     CONF_URL_VAR: user_input[CONF_URL_VAR],
                     CONF_SLL_CHECK_VAR: user_input[CONF_SLL_CHECK_VAR],
                     CONF_LINK_URL_VAR: link_url,
+                    CONF_LAST_CHECK_VAR: user_input.get(CONF_LAST_CHECK_VAR, False),
                 },
             )
 
@@ -61,6 +63,7 @@ class WebServerStatusConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     vol.Required(CONF_URL_VAR, default=""): str,
                     vol.Required(CONF_SLL_CHECK_VAR, default=True): bool,
                     vol.Optional(CONF_LINK_URL_VAR): str,
+                    vol.Optional(CONF_LAST_CHECK_VAR, default=False): bool,
                 }
             ),
             errors=self._errors,
@@ -108,6 +111,9 @@ class WebServerStatusOptionsFlowHandler(config_entries.OptionsFlow):
         current_link_url = self.config_entry.options.get(
             CONF_LINK_URL_VAR, self.config_entry.data.get(CONF_LINK_URL_VAR, "")
         )
+        current_last_check = self.config_entry.options.get(
+            CONF_LAST_CHECK_VAR, self.config_entry.data.get(CONF_LAST_CHECK_VAR, False)
+        )
 
         return self.async_show_form(
             step_id="user",
@@ -125,6 +131,10 @@ class WebServerStatusOptionsFlowHandler(config_entries.OptionsFlow):
                         CONF_LINK_URL_VAR,
                         description={"suggested_value": current_link_url},
                     ): str,
+                    vol.Optional(
+                        CONF_LAST_CHECK_VAR,
+                        default=current_last_check,
+                    ): bool,
                 }
             ),
             errors=errors,
