@@ -8,7 +8,8 @@
             "webserver_name": "Webserver name (ie. Google)",
             "webserver_url": "Webserver http or https url",
             "webserver_ssl_check": "SSL Check",
-            "webserver_link_url": "Link URL (optional, opened from the dashboard; defaults to the webserver url)"
+            "webserver_link_url": "Link URL (optional, opened from the dashboard; defaults to the webserver url)",
+            "webserver_last_check": "Last check sensor (shows when the webserver was last checked)"
           }
         }
       },
@@ -23,7 +24,8 @@
           "data": {
             "ping_interval": "Update interval (seconds)",
             "timeout": "Request timeout (seconds)",
-            "webserver_link_url": "Link URL (optional, defaults to the webserver url)"
+            "webserver_link_url": "Link URL (optional, defaults to the webserver url)",
+            "webserver_last_check": "Last check sensor (shows when the webserver was last checked)"
           }
         }
       },

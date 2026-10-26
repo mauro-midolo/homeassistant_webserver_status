@@ -1,0 +1,36 @@
+{
+    "config": {
+      "step": {
+        "user": {
+          "title": "Webserver Status",
+          "description": "Zie de documentatie voor hulp bij de configuratie.",
+          "data": {
+            "webserver_name": "Naam van de webserver (bijv. Google)",
+            "webserver_url": "Http- of https-url van de webserver",
+            "webserver_ssl_check": "SSL-controle",
+            "webserver_link_url": "Link-URL (optioneel, geopend vanaf het dashboard; standaard de url van de webserver)",
+            "webserver_last_check": "Sensor laatste controle (toont wanneer de webserver voor het laatst is gecontroleerd)"
+          }
+        }
+      },
+      "error": {
+        "invalid_url": "Het http/https-pad is niet correct",
+        "invalid_link_url": "De link-url moet een geldige http/https-url zijn"
+      }
+    },
+    "options": {
+      "step": {
+        "user": {
+          "data": {
+            "ping_interval": "Update-interval (seconden)",
+            "timeout": "Time-out van het verzoek (seconden)",
+            "webserver_link_url": "Link-URL (optioneel, standaard de url van de webserver)",
+            "webserver_last_check": "Sensor laatste controle (toont wanneer de webserver voor het laatst is gecontroleerd)"
+          }
+        }
+      },
+      "error": {
+        "invalid_link_url": "De link-url moet een geldige http/https-url zijn"
+      }
+    }
+  }

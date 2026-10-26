@@ -7,9 +7,11 @@ from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.components.sensor import SensorEntity
 from .http.httpclient import HttpClient
+from homeassistant.const import EntityCategory
+from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
-from .sensorlist import sensors_binary
+from .sensorlist import optional_sensors, sensors_binary
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 _LOGGER = logging.getLogger(__name__)
@@ -44,12 +46,24 @@ class WebServerStatusDataCoordinator(DataUpdateCoordinator):
         return result._data
 
 
+def get_unique_id(entry: ConfigEntry, sensor_name):
+    return f"{entry.data.get(CONF_ALIAS_VAR)}-{sensor_name}"
+
+
 def get_link_url(entry: ConfigEntry):
     """Return the URL to open for this webserver, defaulting to the monitored one."""
     link_url = entry.options.get(
         CONF_LINK_URL_VAR, entry.data.get(CONF_LINK_URL_VAR, "")
     )
     return link_url or entry.data.get(CONF_URL_VAR)
+
+
+def is_sensor_enabled(entry: ConfigEntry, sensor_name):
+    """Return whether the sensor is enabled; optional sensors are off by default."""
+    conf_key = optional_sensors.get(sensor_name)
+    if conf_key is None:
+        return True
+    return entry.options.get(conf_key, entry.data.get(conf_key, False))
 
 
 async def async_setup_entry(
@@ -66,7 +80,16 @@ async def async_setup_entry(
         hass, webserver_url, update_interval, ssl_checker, timeout
     )
     await coordinator.async_config_entry_first_refresh()
+    registry = er.async_get(hass)
     for sensor_name in sensors_binary:
+        if not is_sensor_enabled(entry, sensor_name):
+            # Remove the entity left over from when the sensor was enabled
+            entity_id = registry.async_get_entity_id(
+                "sensor", DOMAIN, get_unique_id(entry, sensor_name)
+            )
+            if entity_id:
+                registry.async_remove(entity_id)
+            continue
         async_add_entities(
             [WebServerStatusSensor(entry, sensor_name, coordinator)], True
         )
@@ -86,7 +109,7 @@ class WebServerStatusEntity(CoordinatorEntity):
     @property
     def unique_id(self):
         """Return a unique ID to use for this entity."""
-        return f"{self._entry.data.get(CONF_ALIAS_VAR)}-{self._sensor_name}"
+        return get_unique_id(self._entry, self._sensor_name)
 
     @property
     def name(self):
@@ -94,7 +117,7 @@ class WebServerStatusEntity(CoordinatorEntity):
         return f"{self._entry.data.get(CONF_ALIAS_VAR)} {sensors_binary[self._sensor_name][0]}"
 
     @property
-    def state(self):
+    def native_value(self):
         return self.coordinator.data.get(self._sensor_name)
 
     @property
@@ -106,6 +129,13 @@ class WebServerStatusEntity(CoordinatorEntity):
     def device_class(self):
         """Return the device class of the sensor."""
         return sensors_binary[self._sensor_name][1]
+
+    @property
+    def entity_category(self):
+        """Show the optional sensors in the diagnostic section of the device."""
+        if self._sensor_name in optional_sensors:
+            return EntityCategory.DIAGNOSTIC
+        return None
 
     @property
     def extra_state_attributes(self):
